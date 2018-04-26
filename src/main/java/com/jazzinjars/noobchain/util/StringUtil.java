@@ -3,8 +3,10 @@ package com.jazzinjars.noobchain.util;
 import com.google.gson.GsonBuilder;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class StringUtil {
 
@@ -42,5 +44,9 @@ public class StringUtil {
     //Returns difficulty string target, to compare to hash. eg difficulty of 5 will return "00000"
     public static String getDifficultyString(int difficulty) {
         return new String(new char[difficulty]).replace('\0', '0');
+    }
+
+    public static String getStringFromKey(Key key) {
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 }
