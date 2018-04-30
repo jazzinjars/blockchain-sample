@@ -3,9 +3,7 @@ package com.jazzinjars.noobchain.util;
 import com.google.gson.GsonBuilder;
 
 import java.io.UnsupportedEncodingException;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.util.Base64;
 
 public class StringUtil {
@@ -34,6 +32,50 @@ public class StringUtil {
         }
 
         return "";
+    }
+
+    //Applies ECDSA Signature and returns the result (as bytes)
+    public static byte[] applyECDSASig(PrivateKey privateKey, String input) {
+        Signature dsa;
+        byte[] output = new byte[0];
+
+        try {
+            dsa = Signature.getInstance("ECDSA", "BC");
+            dsa.initSign(privateKey);
+            byte[] strByte = input.getBytes();
+            dsa.update(strByte);
+            byte[] realSig = dsa.sign();
+            output = realSig;
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+        return output;
+    }
+
+    //Verifies a String signature
+    public static boolean verifyECDASig(PublicKey publicKey, String data, byte[] signature) {
+
+        try {
+            Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
+            ecdsaVerify.initVerify(publicKey);
+            ecdsaVerify.update(data.getBytes());
+            return ecdsaVerify.verify(signature);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //Short hand helper to turn Object into a json string
