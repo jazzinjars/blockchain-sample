@@ -10,14 +10,14 @@ import java.util.List;
 
 public class Transaction {
 
-    public String transactionId;    //this is also the hast of the transaction
-    public PublicKey sender;     //senders address/public key
-    public PublicKey recipient;     //recipient address/public key
-    public float value;
-    public byte[] signature;        //this is to prevent anybody else from spending funds in our wallet
+    private String transactionId;    //this is also the hast of the transaction
+    private PublicKey sender;     //senders address/public key
+    private PublicKey recipient;     //recipient address/public key
+    private float value;
+    private byte[] signature;        //this is to prevent anybody else from spending funds in our wallet
 
-    public List<TransactionInput> inputs = new ArrayList<TransactionInput>();
-    public List<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
+    private List<TransactionInput> inputs = new ArrayList<TransactionInput>();
+    private List<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
 
     private static int sequence = 0;    //a rough count of how many transactions have been generated
 
@@ -106,5 +106,37 @@ public class Transaction {
     public boolean verifySignature() {
         String data = StringUtil.getStringFromKey(sender) + StringUtil.getStringFromKey(recipient) + Float.toString(value);
         return StringUtil.verifyECDASig(sender, data, signature);
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public PublicKey getSender() {
+        return sender;
+    }
+
+    public PublicKey getRecipient() {
+        return recipient;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public byte[] getSignature() {
+        return signature;
+    }
+
+    public List<TransactionInput> getInputs() {
+        return inputs;
+    }
+
+    public List<TransactionOutput> getOutputs() {
+        return outputs;
+    }
+
+    public static int getSequence() {
+        return sequence;
     }
 }
