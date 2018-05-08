@@ -112,6 +112,8 @@ public class Transaction {
         return transactionId;
     }
 
+    public void setTransactionId(String id) { this.transactionId = id; }
+
     public PublicKey getSender() {
         return sender;
     }
